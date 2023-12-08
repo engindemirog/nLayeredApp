@@ -1,4 +1,6 @@
 ﻿using Business.Abstracts;
+using Business.Dtos.Requests;
+using Business.Dtos.Responses;
 using Core.DataAccess.Paging;
 using DataAccess.Abstracts;
 using Entities.Concretes;
@@ -19,9 +21,25 @@ public class ProductManager : IProductService
         _productDal = productDal;
     }
 
-    public async Task Add(Product product)
+    public async Task<CreatedProductResponse> Add(CreateProductRequest createProductRequest)
     {
-       await _productDal.AddAsync(product);
+        Product product = new Product();
+        product.Id = Guid.NewGuid();
+        product.ProductName = createProductRequest.ProductName;
+        product.UnitPrice = createProductRequest.UnitPrice;
+        product.QuantityPerUnit = createProductRequest.QuantityPerUnit;
+        product.UnitsInStock = createProductRequest.UnitsInStock;
+
+        Product createdProduct = await _productDal.AddAsync(product);
+
+        CreatedProductResponse createdProductResponse = new CreatedProductResponse();
+        createdProductResponse.Id = createdProduct.Id;
+        createdProductResponse.ProductName = createdProduct.ProductName;
+        createdProductResponse.UnitPrice = createdProduct.UnitPrice;
+        createdProductResponse.QuantityPerUnit = createdProduct.QuantityPerUnit;
+        createdProductResponse.UnitsInStock = createdProduct.UnitsInStock;
+
+        return createdProductResponse;
     }
 
     public async Task<IPaginate<Product>> GetListAsync()
