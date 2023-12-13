@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Concretes;
 
-public class EfProductDal : EfRepositoryBase<Product, Guid, NorthwindContext>, IProductDal
+public class EfProductDal : EfRepositoryBase<Product, int, NorthwindContext>, IProductDal
 {
     public EfProductDal(NorthwindContext context) : base(context)
     {
